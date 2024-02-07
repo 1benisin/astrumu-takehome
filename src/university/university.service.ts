@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { UniversityType } from './university.type';
 import { mockUniversityData } from './university.data';
-import { CreateUniversityInput } from './university.input';
+import {
+  CreateUniversityInput,
+  UpdateUniversityInput,
+} from './university.input';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()
@@ -44,7 +47,7 @@ export class UniversityService {
 
   async update(
     id: string,
-    university: UniversityType,
+    university: UpdateUniversityInput,
   ): Promise<UniversityType> {
     const index = this.universities.findIndex(
       (university) => university.id === id,
@@ -54,9 +57,10 @@ export class UniversityService {
       throw new Error('University not found');
     }
 
-    this.universities[index] = university;
+    const updatedU = { ...this.universities[index], ...university };
+    this.universities[index] = updatedU;
 
-    return university;
+    return updatedU;
   }
 
   async delete(id: string): Promise<UniversityType> {
