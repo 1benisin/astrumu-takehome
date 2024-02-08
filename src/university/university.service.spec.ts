@@ -38,7 +38,7 @@ describe('UniversityService', () => {
     service = module.get<UniversityService>(UniversityService);
 
     // Reset the universities array to a known state before each test
-    service['universities'] = [];
+    UniversityService.universities = [];
   });
 
   it('should be defined', () => {
@@ -63,7 +63,7 @@ describe('UniversityService', () => {
       expect(mockCityService.create).toHaveBeenCalledWith(
         createUniversityInput.city,
       );
-      expect(service['universities']).toContainEqual(result);
+      expect(UniversityService.universities).toContainEqual(result);
     });
   });
 
@@ -162,7 +162,7 @@ describe('UniversityService', () => {
 
       expect(deletedUniversity).toBeDefined();
       expect(deletedUniversity.id).toBe(university.id);
-      expect(service['universities'].length).toBe(0);
+      expect(UniversityService.universities.length).toBe(0);
     });
 
     it('should throw an error if trying to delete a non-existing university', async () => {

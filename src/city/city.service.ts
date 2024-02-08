@@ -7,19 +7,19 @@ import { v4 as uuid } from 'uuid';
 @Injectable()
 export class CityService {
   // mock db
-  private cities: CityType[];
+  static cities: CityType[];
 
   constructor(private stateService: StateService) {
     // would typically inject a db repository here for use in this service
-    this.cities = []; // mock db
+    CityService.cities = []; // mock db
   }
 
   async findAll(): Promise<CityType[]> {
-    return this.cities;
+    return CityService.cities;
   }
 
   async findById(id: string): Promise<CityType> {
-    const city = this.cities.find((city) => city.id === id);
+    const city = CityService.cities.find((city) => city.id === id);
     if (!city) {
       throw new Error('City not found');
     }
@@ -29,7 +29,7 @@ export class CityService {
 
   async findByNameAndState(input: CreateCityInput): Promise<CityType> {
     // find city by name and state
-    const city = this.cities.find(
+    const city = CityService.cities.find(
       (city) =>
         city.name === input.name && city.state.name === input.state.name,
     );
@@ -58,7 +58,7 @@ export class CityService {
           state: stateEntity,
         };
 
-        this.cities.push(cityEntity);
+        CityService.cities.push(cityEntity);
       }
 
       return cityEntity;
@@ -68,13 +68,13 @@ export class CityService {
   }
 
   async delete(id: string): Promise<CityType> {
-    const index = this.cities.findIndex((city) => city.id === id);
+    const index = CityService.cities.findIndex((city) => city.id === id);
     // if no city found
     if (index === -1) {
       throw new Error('City not found');
     }
 
-    const city = this.cities.splice(index, 1);
+    const city = CityService.cities.splice(index, 1);
 
     return city[0];
   }

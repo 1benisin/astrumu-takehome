@@ -14,7 +14,7 @@ describe('StateService', () => {
 
     service = module.get<StateService>(StateService);
     // Reset the states array to a known state before each test
-    service['states'] = [];
+    StateService.states = [];
   });
 
   it('should be defined', () => {
@@ -29,7 +29,7 @@ describe('StateService', () => {
 
       expect(state).toBeDefined();
       expect(state.name).toBe(validStateName);
-      expect(service['states'].length).toBe(1);
+      expect(StateService.states.length).toBe(1);
     });
   });
 
@@ -70,7 +70,7 @@ describe('StateService', () => {
       const deletedState = await service.delete(id);
       expect(deletedState.id).toBe(id);
       expect(
-        service['states'].find((state) => state.id === id),
+        StateService.states.find((state) => state.id === id),
       ).toBeUndefined();
     });
 

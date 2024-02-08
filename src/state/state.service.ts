@@ -6,19 +6,19 @@ import { v4 as uuid } from 'uuid';
 @Injectable()
 export class StateService {
   // mock db
-  private states: StateType[];
+  static states: StateType[];
 
   constructor() {
-    // would typically inject a db repository here for use in this service
-    this.states = []; // mock db
+    // would typically inject a db repository here for use in StateService service
+    StateService.states = []; // mock db
   }
 
   async findAll(): Promise<StateType[]> {
-    return this.states;
+    return StateService.states;
   }
 
   async findById(id: string): Promise<StateType> {
-    const state = this.states.find((state) => state.id === id);
+    const state = StateService.states.find((state) => state.id === id);
     if (!state) {
       throw new Error('State not found');
     }
@@ -27,7 +27,7 @@ export class StateService {
   }
 
   async findByName(name: string): Promise<StateType> {
-    const state = this.states.find((state) => state.name === name);
+    const state = StateService.states.find((state) => state.name === name);
     if (!state) {
       throw new Error(
         'State not found. Be sure to use full state name. "California" not "CA" or "california"',
@@ -46,21 +46,20 @@ export class StateService {
       stateEntity = await this.findByName(name);
     } catch (error) {
       stateEntity = { id: uuid(), name };
+      StateService.states.push(stateEntity);
     }
-
-    this.states.push(stateEntity);
 
     return stateEntity;
   }
 
   async delete(id: string): Promise<StateType> {
-    const index = this.states.findIndex((state) => state.id === id);
+    const index = StateService.states.findIndex((state) => state.id === id);
     // if no state found
     if (index === -1) {
       throw new Error('State not found');
     }
 
-    const state = this.states.splice(index, 1);
+    const state = StateService.states.splice(index, 1);
 
     return state[0];
   }

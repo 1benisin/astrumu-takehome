@@ -48,7 +48,7 @@ The following resources were instrumental in the development of this project:
 
 ## Project Decisions
 
-- **Mocked Database**: The project uses local arrays to mock a database for simplicity and to focus on API development.
+- **Mocked Database**: The project uses local arrays to mock a database for simplicity and to focus on API development. Mock data is loaded at the start of the application and is not persisted between server restarts.
 - **Duplicate Entries**: The API is designed to prevent the creation of duplicate cities or states but does not check for duplicate universities. Cities and states can only be created or deleted, not updated.
 
 ## Reflections

@@ -27,7 +27,7 @@ describe('CityService', () => {
     stateService = module.get<StateService>(StateService);
 
     // Reset the cities array to a known state before each test
-    service['cities'] = [];
+    CityService.cities = [];
   });
 
   it('should be defined', () => {
@@ -110,7 +110,7 @@ describe('CityService', () => {
 
       expect(result).toBeDefined();
       expect(result.id).toBe(city.id);
-      expect(service['cities'].length).toBe(0);
+      expect(CityService.cities.length).toBe(0);
     });
 
     it('should throw an error if trying to delete a non-existing city', async () => {
