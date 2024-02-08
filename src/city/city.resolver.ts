@@ -1,7 +1,7 @@
 import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
 import { CityType } from './city.type';
 import { CityService } from './city.service';
-import { CreateCityInput, UpdateCityInput } from './city.input';
+import { CreateCityInput } from './city.input';
 
 @Resolver((of) => CityType)
 export class CityResolver {
@@ -20,14 +20,6 @@ export class CityResolver {
   @Mutation((returns) => CityType)
   createCity(@Args('createCityInput') createCityInput: CreateCityInput) {
     return this.cityService.create(createCityInput);
-  }
-
-  @Mutation((returns) => CityType)
-  updateCity(
-    @Args('id') id: string,
-    @Args('updateCityInput') updateCityInput: UpdateCityInput,
-  ) {
-    return this.cityService.update(id, updateCityInput);
   }
 
   @Mutation((returns) => CityType)

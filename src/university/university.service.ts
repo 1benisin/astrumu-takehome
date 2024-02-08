@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UniversityType } from './university.type';
-import { CityService } from 'src/city/city.service';
-import { CityType } from 'src/city/city.type';
-import { mockUniversityData } from './university.data';
+import { CityService } from '../city/city.service';
 import {
   CreateUniversityInput,
   UpdateUniversityInput,
@@ -36,25 +34,23 @@ export class UniversityService {
   async create(
     createUniversityInput: CreateUniversityInput,
   ): Promise<UniversityType> {
-    const { name, city } = createUniversityInput;
-
-    // create city if it doesn't exist
-    let cityEntity: CityType;
     try {
-      cityEntity = await this.cityService.findByName(city.name);
+      // create city. If city exists, it will return the existing city
+      let cityEntity = await this.cityService.create(
+        createUniversityInput.city,
+      );
+      // create university
+      const university = {
+        id: uuid(),
+        name: createUniversityInput.name,
+        city: cityEntity,
+      };
+      this.universities.push(university);
+
+      return university;
     } catch (error) {
-      cityEntity = await this.cityService.create({ name: city.name });
+      throw new Error(`Failed to create University: ${error}`);
     }
-
-    const university: UniversityType = {
-      id: uuid(),
-      name,
-      city: cityEntity,
-    };
-
-    this.universities.push(university);
-
-    return university;
   }
 
   async update(
@@ -69,23 +65,18 @@ export class UniversityService {
       throw new Error('University not found');
     }
 
-    // update city if it exists
-    let cityEntity: CityType;
-    if (university.city) {
-      try {
-        cityEntity = await this.cityService.findByName(university.city.name);
-      } catch (error) {
-        cityEntity = await this.cityService.create({
-          name: university.city.name,
-        });
-      }
-    }
-
     const updatedU = {
       ...this.universities[index],
       ...university,
-      city: cityEntity,
-    };
+    } as UniversityType;
+
+    // update city if it exists
+    if (university.city) {
+      // create city. If city exists, it will return the existing city
+      let cityEntity = await this.cityService.create(university.city);
+      updatedU.city = cityEntity;
+    }
+
     this.universities[index] = updatedU;
 
     return updatedU;

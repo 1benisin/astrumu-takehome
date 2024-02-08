@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { MinLength, IsOptional } from 'class-validator';
-import { CreateCityInput, UpdateCityInput } from 'src/city/city.input';
+import { MinLength, IsOptional, ValidateNested } from 'class-validator';
+import { CreateCityInput } from '../city/city.input';
 
 @InputType()
 export class CreateUniversityInput {
@@ -8,6 +8,7 @@ export class CreateUniversityInput {
   @Field()
   name: string;
 
+  @ValidateNested()
   @Field(() => CreateCityInput)
   city: CreateCityInput;
 }
@@ -19,7 +20,8 @@ export class UpdateUniversityInput {
   @Field({ nullable: true })
   name?: string;
 
+  @ValidateNested()
   @IsOptional()
-  @Field(() => UpdateCityInput, { nullable: true })
-  city?: UpdateCityInput;
+  @Field(() => CreateCityInput, { nullable: true })
+  city?: CreateCityInput;
 }

@@ -1,6 +1,6 @@
 // university.type.ts
 import { Field, ObjectType, ID } from '@nestjs/graphql';
-import { CityType } from 'src/city/city.type';
+import { CityType } from '../city/city.type';
 
 @ObjectType()
 export class UniversityType {
