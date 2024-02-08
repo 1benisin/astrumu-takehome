@@ -1,4 +1,3 @@
-// city.type.ts
 import { Field, ObjectType, ID } from '@nestjs/graphql';
 
 @ObjectType()

@@ -13,7 +13,9 @@ export class UniversityService {
   private universities: UniversityType[];
 
   constructor() {
-    this.universities = [];
+    // would typically inject a db repository here for use in this service
+
+    this.universities = []; // mock db
   }
 
   async findAll(): Promise<UniversityType[]> {

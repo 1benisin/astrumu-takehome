@@ -2,24 +2,16 @@ import { Field, InputType } from '@nestjs/graphql';
 import { MinLength, IsOptional } from 'class-validator';
 
 @InputType()
-export class CreateUniversityInput {
+export class CreateCityInput {
   @MinLength(1)
   @Field()
   name: string;
-
-  @Field()
-  city: string;
 }
 
 @InputType()
-export class UpdateUniversityInput {
+export class UpdateCityInput {
   @IsOptional()
   @MinLength(1)
   @Field({ nullable: true })
   name?: string;
-
-  @IsOptional()
-  @MinLength(1)
-  @Field({ nullable: true })
-  city?: string;
 }
