@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UniversityType } from './university.type';
+import { CityService } from 'src/city/city.service';
+import { CityType } from 'src/city/city.type';
 import { mockUniversityData } from './university.data';
 import {
   CreateUniversityInput,
@@ -12,7 +14,7 @@ export class UniversityService {
   // mock db
   private universities: UniversityType[];
 
-  constructor() {
+  constructor(private cityService: CityService) {
     // would typically inject a db repository here for use in this service
 
     this.universities = []; // mock db
@@ -36,10 +38,18 @@ export class UniversityService {
   ): Promise<UniversityType> {
     const { name, city } = createUniversityInput;
 
+    // create city if it doesn't exist
+    let cityEntity: CityType;
+    try {
+      cityEntity = await this.cityService.findByName(city.name);
+    } catch (error) {
+      cityEntity = await this.cityService.create({ name: city.name });
+    }
+
     const university: UniversityType = {
       id: uuid(),
       name,
-      city,
+      city: cityEntity,
     };
 
     this.universities.push(university);
@@ -59,7 +69,23 @@ export class UniversityService {
       throw new Error('University not found');
     }
 
-    const updatedU = { ...this.universities[index], ...university };
+    // update city if it exists
+    let cityEntity: CityType;
+    if (university.city) {
+      try {
+        cityEntity = await this.cityService.findByName(university.city.name);
+      } catch (error) {
+        cityEntity = await this.cityService.create({
+          name: university.city.name,
+        });
+      }
+    }
+
+    const updatedU = {
+      ...this.universities[index],
+      ...university,
+      city: cityEntity,
+    };
     this.universities[index] = updatedU;
 
     return updatedU;

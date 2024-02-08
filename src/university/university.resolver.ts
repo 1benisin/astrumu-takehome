@@ -1,6 +1,7 @@
 import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
 import { UniversityType } from './university.type';
 import { UniversityService } from './university.service';
+import { CityService } from '../city/city.service';
 import {
   CreateUniversityInput,
   UpdateUniversityInput,
@@ -8,7 +9,10 @@ import {
 
 @Resolver((of) => UniversityType)
 export class UniversityResolver {
-  constructor(private universityService: UniversityService) {}
+  constructor(
+    private universityService: UniversityService,
+    private cityService: CityService,
+  ) {}
 
   @Query((returns) => [UniversityType])
   universities() {

@@ -19,12 +19,21 @@ export class CityService {
   }
 
   async findById(id: string): Promise<CityType> {
-    const foundU = this.cities.find((city) => city.id === id);
-    if (!foundU) {
+    const city = this.cities.find((city) => city.id === id);
+    if (!city) {
       throw new Error('City not found');
     }
 
-    return foundU;
+    return city;
+  }
+
+  async findByName(name: string): Promise<CityType> {
+    const city = this.cities.find((city) => city.name === name);
+    if (!city) {
+      throw new Error('City not found');
+    }
+
+    return city;
   }
 
   async create(createCityInput: CreateCityInput): Promise<CityType> {
@@ -60,8 +69,8 @@ export class CityService {
       throw new Error('City not found');
     }
 
-    const deletedU = this.cities.splice(index, 1);
+    const city = this.cities.splice(index, 1);
 
-    return deletedU[0];
+    return city[0];
   }
 }
