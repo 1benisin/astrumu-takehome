@@ -12,9 +12,7 @@ export class AuthGuard implements CanActivate {
     const gqlCtx = ctx.getContext();
     const request = gqlCtx.req || context.switchToHttp().getRequest();
 
-    console.log(request.headers);
     const authToken = request.headers['authtoken'];
-    console.log('authoken', authToken);
 
     if (authToken) {
       return true;
