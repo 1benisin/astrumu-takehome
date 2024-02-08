@@ -6,24 +6,51 @@ import {
   UpdateUniversityInput,
 } from './university.input';
 import { v4 as uuid } from 'uuid';
+import { mockUniversityData } from './university.mockdata';
 
 @Injectable()
 export class UniversityService {
   // mock db
-  private universities: UniversityType[];
+  static universities: UniversityType[];
 
   constructor(private cityService: CityService) {
     // would typically inject a db repository here for use in this service
 
-    this.universities = []; // mock db
+    UniversityService.universities = []; // mock db
+    this.loadMockData();
+  }
+
+  private async loadMockData() {
+    for (const data of mockUniversityData) {
+      try {
+        const cityEntity = await this.cityService.create({
+          name: data.city.name,
+          state: { name: data.city.state.name },
+        });
+
+        const university: UniversityType = {
+          id: data.id.toString(),
+          name: data.name,
+          city: cityEntity,
+        };
+
+        UniversityService.universities.push(university);
+      } catch (error) {
+        console.error(
+          `Failed to load mock data for university ${data.name}: ${error}`,
+        );
+      }
+    }
   }
 
   async findAll(): Promise<UniversityType[]> {
-    return this.universities;
+    return UniversityService.universities;
   }
 
   async findById(id: string): Promise<UniversityType> {
-    const foundU = this.universities.find((university) => university.id === id);
+    const foundU = UniversityService.universities.find(
+      (university) => university.id === id,
+    );
     if (!foundU) {
       throw new Error('University not found');
     }
@@ -45,7 +72,7 @@ export class UniversityService {
         name: createUniversityInput.name,
         city: cityEntity,
       };
-      this.universities.push(university);
+      UniversityService.universities.push(university);
 
       return university;
     } catch (error) {
@@ -57,7 +84,7 @@ export class UniversityService {
     id: string,
     university: UpdateUniversityInput,
   ): Promise<UniversityType> {
-    const index = this.universities.findIndex(
+    const index = UniversityService.universities.findIndex(
       (university) => university.id === id,
     );
     // if no university found
@@ -66,7 +93,7 @@ export class UniversityService {
     }
 
     const updatedU = {
-      ...this.universities[index],
+      ...UniversityService.universities[index],
       ...university,
     } as UniversityType;
 
@@ -77,13 +104,13 @@ export class UniversityService {
       updatedU.city = cityEntity;
     }
 
-    this.universities[index] = updatedU;
+    UniversityService.universities[index] = updatedU;
 
     return updatedU;
   }
 
   async delete(id: string): Promise<UniversityType> {
-    const index = this.universities.findIndex(
+    const index = UniversityService.universities.findIndex(
       (university) => university.id === id,
     );
     // if no university found
@@ -91,7 +118,7 @@ export class UniversityService {
       throw new Error('University not found');
     }
 
-    const deletedU = this.universities.splice(index, 1);
+    const deletedU = UniversityService.universities.splice(index, 1);
 
     return deletedU[0];
   }
