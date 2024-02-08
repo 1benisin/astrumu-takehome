@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
@@ -14,9 +19,12 @@ export class AuthGuard implements CanActivate {
 
     const authToken = request.headers['authtoken'];
 
-    if (authToken) {
-      return true;
+    if (!authToken) {
+      throw new UnauthorizedException(
+        'Missing authToken in request headers. Set to any value to authenticate. 😉',
+      );
     }
-    return false;
+
+    return true;
   }
 }
