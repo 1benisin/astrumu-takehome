@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { MinLength, ValidateNested } from 'class-validator';
+import { IsOptional, MinLength, ValidateNested } from 'class-validator';
 import { CreateStateInput } from '../state/state.input';
 
 @InputType()
