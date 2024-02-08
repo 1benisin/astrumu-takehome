@@ -1,5 +1,5 @@
-// city.type.ts
 import { Field, ObjectType, ID } from '@nestjs/graphql';
+import { StateType } from '../state/state.type';
 
 @ObjectType()
 export class CityType {
@@ -8,4 +8,7 @@ export class CityType {
 
   @Field()
   name: string;
+
+  @Field(() => StateType)
+  state: StateType;
 }
