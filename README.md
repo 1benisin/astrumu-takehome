@@ -4,23 +4,23 @@ This project was developed as part of a take-home interview for AstrumU. It show
 
 ## Installation
 
-To set up the project environment, run the following command in the terminal:
-
+```bash
 $ npm install
+```
 
 ## Running the App
 
-To start the application in development mode, use the following command:
-
+```bash
 $ npm run start:dev
+```
 
 Once the application is running, you can access the GraphQL Playground at [http://localhost:3000/graphql](http://localhost:3000/graphql) to interact with the API.
 
 ## Testing
 
-Run the following command to execute the unit tests:
-
+```bash
 $ npm run test
+```
 
 ## GraphQL Playground
 
